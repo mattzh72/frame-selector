@@ -17,6 +17,6 @@ Frame-Selector comes with three different methods for quantifying the degree of 
 ## Feature Detection Visualization
 
 (From top to bottom) Ground frame, more similar frame, less similar frame.
-<img src="https://raw.githubusercontent.com/vitae-gravitas/Frame-Selector/master/README/keypoints.png" width="600">
+![Image](https://raw.githubusercontent.com/vitae-gravitas/Frame-Selector/master/README/features.png)
 
 
