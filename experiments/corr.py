@@ -16,6 +16,13 @@ far_resize = cv2.resize(far, SIZE)
 
 res = cv2.matchTemplate(near_resize, ground_resize, cv2.TM_SQDIFF_NORMED)
 print("close:" + str(res[0]))
+print(res)
+plt.imshow(res,cmap = 'gray')
+# plt.imshow(far,cmap = 'gray')
+plt.show()
+plt.close()
 
 res = cv2.matchTemplate(far_resize, ground_resize, cv2.TM_SQDIFF_NORMED)
 print("different:" + str(res[0]))
+
+
