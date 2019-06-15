@@ -16,7 +16,8 @@ Frame-Selector comes with three different methods for quantifying the degree of 
 
 ## Feature Detection Demo:
 (From left to right) Ground frame, more similar frame, less similar frame.
-> ![Image](https://raw.githubusercontent.com/vitae-gravitas/Frame-Selector/master/README/features.png)
+![Image](https://raw.githubusercontent.com/vitae-gravitas/Frame-Selector/master/README/features.png)
+> This demo can be found in `experiments/match.py`.
 
 
 
