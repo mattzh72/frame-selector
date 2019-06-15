@@ -11,4 +11,5 @@ Frame-Selector comes with three different methods for quantifying the degree of 
 > This runs the fastest compared to the other two approaches, and is sensitive to larger changes in the image based on lighting and orientation, and the size of the object being displaced.
  - Two **feature** based approaches. These find ~500 keypoints in two frames using ORB (Oriented FAST and Rotated BRIEF).
 	 - Calculate the **mean squared error** between their keypoints.
-	 - Utilize **KNN (k-nearest-neighbors)** to match and find the distance between their keypoints.> These are more lighting and orientation agnostic, and are concerned more with the **context** of the video, i.e. what is moving, how much is it moving, etc. However, calculations for this style of approach can be computationally expensive.
+	 - Utilize **KNN (k-nearest-neighbors)** to match and find the distance between their keypoints.
+> These are more lighting and orientation agnostic, and are concerned more with the **context** of the video, i.e. what is moving, how much is it moving, etc. However, calculations for this style of approach can be computationally expensive.
