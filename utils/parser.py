@@ -1,25 +1,57 @@
 import cv2
 import os
 import sys
+from enum import Enum
 
-def parse(video, target=None, write=False, skip=5): 
-	vid = cv2.VideoCapture(video)
-	ret,frame = vid.read()
 
-	currFrame = 0
-	frames = {}
+import turicreate
+from turicreate import SFrame
 
-	while(ret):
-		if currFrame % skip == 0:
-			frames[currFrame] = frame
+class Parser(object):
+	def __init__(self):
+		pass
 
-			if target and write:
-				cv2.imwrite(os.path.join(target, '{0}.jpg'.format(currFrame)), frame)
+	@staticmethod
+	def read_sframe(sframe, target=None, skip=5):
+		assert (skip >= 1), "@Param 'skip' cannot be less than 1." 
 
-		currFrame += 1
+		sf = turicreate.load_sframe(sframe)
+		curr_frame = 0
+		frames = {}
+
+		while curr_frame < len(sf['image']):
+			frames[curr_frame] = sf['image'][curr_frame].pixel_data
+
+			if target:
+					cv2.imwrite(os.path.join(target, '{0}.jpg'.format(curr_frame)), frames[curr_frame])
+
+			curr_frame += skip 
+
+		return frames
+
+	@staticmethod
+	def read_video(video, target=None, skip=5): 
+		assert (skip >= 1), "@Param 'skip' cannot be less than 1."
+
+		vid = cv2.VideoCapture(video)
 		ret,frame = vid.read()
 
-	vid.release()
-	cv2.destroyAllWindows()
+		curr_frame = 0
+		frames = {}
 
-	return frames
+		while(ret):
+			if curr_frame % skip == 0:
+				frames[curr_frame] = frame
+
+				if target:
+					cv2.imwrite(os.path.join(target, '{0}.jpg'.format(curr_frame)), frame)
+
+			curr_frame += 1
+			ret,frame = vid.read()
+
+		vid.release()
+		cv2.destroyAllWindows()
+
+		return frames
+
+

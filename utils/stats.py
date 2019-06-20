@@ -49,11 +49,3 @@ def select_by_percentile(n, lst, threshhold=25):
 	selected = [lst[i] for i in range(len(lst)) if i % factor == 0]
 
 	return selected
-
-
-
-
-
-# lst = [1, 2, 3, 4, 5]
-# print(np.percentile(lst, 25))
-# print(sum(lst) / len(lst))

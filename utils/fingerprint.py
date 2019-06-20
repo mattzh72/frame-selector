@@ -3,9 +3,15 @@ import cv2
 
 
 def correlate(img, ground, size=(50, 50), corr=cv2.TM_SQDIFF_NORMED):
+	assert (len(img.shape) == 2 or len(img.shape) == 3), "Incorrect dimensions for image."
+	assert (len(ground.shape) == 2 or len(ground.shape) == 3), "Incorrect dimensions for ground."
+
 	# Convert to grayscale.
-	img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	ground = cv2.cvtColor(ground, cv2.COLOR_BGR2GRAY)
+	if len(img.shape) == 3:
+		img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+	if len(ground.shape) == 3:
+		ground = cv2.cvtColor(ground, cv2.COLOR_BGR2GRAY)
 
 	# Resize everything down.
 	ground_resize = cv2.resize(ground, size)
@@ -14,6 +20,12 @@ def correlate(img, ground, size=(50, 50), corr=cv2.TM_SQDIFF_NORMED):
 	# Get the correlation between the img and ground.
 	return cv2.matchTemplate(img_resize, ground_resize, corr)[0][0]
 
+"""
+[{'coordinates': {'x': 262.5, 'width': 181, 'y': 52.0, 'height': 92}, 'label': 'barbell'}, {'coordinates': {'x': 466.0, 'width': 66, 'y': 215.5, 'height': 49}, 'label': 'barbell'}]
+"""
+# def bounding_box_MSE(bb, bb_ground):
+	
+	
 
 def feature_MSE(img, ground, orb):
 	# Convert to grayscale.
