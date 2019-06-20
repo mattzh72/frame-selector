@@ -11,12 +11,13 @@ Frame-Selector comes with three different methods for quantifying the degree of 
 > This runs the fastest compared to the other two approaches, and is sensitive to larger changes in the image based on lighting and orientation, and the size of the object being displaced.
  - Two **feature** based approaches. These find ~500 keypoints in two frames using ORB (Oriented FAST and Rotated BRIEF).
 	 - Calculate the **mean squared error** between their keypoints.
-	 - Utilize **KNN (k-nearest-neighbors)** to match and find the distance between their keypoints.
+	 - Utilize **KNN (k-nearest-neighbors)** to match detected keypoints betweeen frames. The metric is the diplacement.
 > These are more lighting and orientation agnostic, and are concerned more with the **context** of the video, i.e. what is moving, how much is it moving, etc. However, calculations for this style of approach can be computationally expensive.
 
-## Feature Detection Visualization
+## Feature Detection Demo:
+(From left to right) Ground frame, more similar frame, less similar frame.
+![Image](https://raw.githubusercontent.com/vitae-gravitas/Frame-Selector/master/README/features.png)
+> This demo can be found in `experiments/match.py`.
 
-(From top to bottom) Ground frame, more similar frame, less similar frame.
-<img src="https://raw.githubusercontent.com/vitae-gravitas/Frame-Selector/master/README/keypoints.png" width="600">
 
 
