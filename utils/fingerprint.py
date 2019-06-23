@@ -23,9 +23,11 @@ def correlate(img, ground, size=(50, 50), corr=cv2.TM_SQDIFF_NORMED):
 """
 [{'coordinates': {'x': 262.5, 'width': 181, 'y': 52.0, 'height': 92}, 'label': 'barbell'}, {'coordinates': {'x': 466.0, 'width': 66, 'y': 215.5, 'height': 49}, 'label': 'barbell'}]
 """
-# def bounding_box_MSE(bb, bb_ground):
-	
-	
+def bounding_box_MSE(bb, bb_ground):
+	pts_bb = np.array([list(d['coordinates'].values()) for d in bb]).astype(np.float32)
+	pts_ground = np.array([list(d['coordinates'].values()) for d in bb_ground]).astype(np.float32)
+
+	return (np.square(pts_ground - pts_bb)).mean(axis=None)	
 
 def feature_MSE(img, ground, orb):
 	# Convert to grayscale.

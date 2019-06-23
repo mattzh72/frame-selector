@@ -1,52 +1,45 @@
 import utils.fingerprint as fp
 import numpy as np
-import os
 import cv2
-import random
-import pickle
 
 from utils.parser import Parser
-from utils.stats import segment_by_percentile, select_by_percentile
-from config import Configs
+from utils.stats import select_logarithmic
 
-frames = Parser.read_sframe('sample.sframe', skip=Configs.SKIP)
+from turicreate import SFrame
 
-# Get ground frame.
-ground = frames[Configs.GROUND_INDEX]
+def select_distinct_frames(sframe_path, ground_index, skip=5, num_frames=10, factor=1.4, target=None):
+	assert (factor > 1), "Factor has to be greater than 1."
 
-# Initialize distinct frames lst and map.
-metrics = []
-mapping = {}
+	sf = Parser.read_sframe(sframe_path)
+	frames, boundings = Parser.parse_sframe(sf, skip=skip)
 
-# Initialize orb.
-orb = cv2.ORB_create()
+	# Get ground frame.
+	ground = frames[ground_index]
+	ground_bounding = boundings[ground_index]
 
-for name, frame in frames.items():
-	metric = fp.correlate(frame, ground)
-	metrics.append(metric)
-	mapping[metric] = name
+	# Initialize metrics and mapping lists for the similarity indices and mapping metrics to frame numbers.
+	metrics = []
+	mapping = {}
 
-# if Configs.CACHE:
-# 	# Cache metrics.
-# 	with open(os.path.join(Configs.CACHE_DIR, 'correlate.pickle'), 'wb') as handle:
-# 		pickle.dump({
-# 				'metrics': metrics,
-# 				'mapping': mapping,
-# 				'frames': frames,
-# 				'ground': ground
-# 			}, handle, protocol=pickle.HIGHEST_PROTOCOL)
+	for row_num, bounding in boundings.items():
+		metric = fp.bounding_box_MSE(bounding, ground_bounding)
+		metrics.append(metric)
+		mapping[metric] = row_num
 
-# else:
-# 	with open(os.path.join(Configs.CACHE_DIR, 'correlate.pickle'), 'rb') as handle:
-# 		data = pickle.load(handle)
-# 		metrics, mapping, frames, ground = sorted(data['metrics']), data['mapping'], data['frames'], data['ground']
+	metrics = sorted(metrics)
+	selected = select_logarithmic(metrics, factor=factor)
+	row_nums = []
 
-selected = select_by_percentile(Configs.NUM_FRAMES, metrics, threshhold=20)
-for metric in selected:
-	name = mapping[metric]
-	frame = frames[name]
+	for metric in selected:
+		row_num = mapping[metric]
+		row_nums.append(row_num)
 
-	cv2.imwrite(os.path.join(Configs.TARGET_DIR, '{0}.jpg'.format(name)), frame)
+	new_sf = Parser.delete_rows(sf, ground_index, row_nums, target=target)
+	return new_sf
+
+
+
+
 
 
 

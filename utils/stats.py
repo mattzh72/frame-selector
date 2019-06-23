@@ -40,12 +40,30 @@ def generate_cutoffs(n, lst):
 
 	return cutoffs
 
-def select_by_percentile(n, lst, threshhold=25):
+def slice_off_percentile(lst, threshhold):
 	# Cut away lower threshold.
 	cutoff = np.percentile(lst, threshhold)
 	lst = lst[bisect.bisect_right(lst, cutoff):]
+
+	return lst
+
+def select_uniform(n, lst, threshhold=25):
+	if threshhold: 
+		lst = slice_off_percentile(lst, threshhold)
 
 	factor = len(lst) // n
 	selected = [lst[i] for i in range(len(lst)) if i % factor == 0]
 
 	return selected
+
+def select_logarithmic(lst, factor=1.4):
+	dist = len(lst)
+	selected = []
+	while dist:
+		dist = dist // factor
+		selected.append(lst[len(lst) - int(dist) - 1])
+
+	return selected
+
+
+
