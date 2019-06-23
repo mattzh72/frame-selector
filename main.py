@@ -1,11 +1,6 @@
-import utils.fingerprint as fp
-import numpy as np
-import cv2
-
 from utils.parser import Parser
-from utils.stats import select_logarithmic
-
-from turicreate import SFrame
+from utils.stats import Stats
+from utils.fingerprint import Fingerprint
 
 def select_distinct_frames(sframe_path, ground_index, skip=5, num_frames=10, factor=1.4, target=None):
 	assert (factor > 1), "Factor has to be greater than 1."
@@ -22,12 +17,12 @@ def select_distinct_frames(sframe_path, ground_index, skip=5, num_frames=10, fac
 	mapping = {}
 
 	for row_num, bounding in boundings.items():
-		metric = fp.bounding_box_MSE(bounding, ground_bounding)
+		metric = Fingerprint.bounding_box_MSE(bounding, ground_bounding)
 		metrics.append(metric)
 		mapping[metric] = row_num
 
 	metrics = sorted(metrics)
-	selected = select_logarithmic(metrics, factor=factor)
+	selected = Stats.select_logarithmic(metrics, factor=factor)
 	row_nums = []
 
 	for metric in selected:

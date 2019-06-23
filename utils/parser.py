@@ -12,6 +12,10 @@ class Parser(object):
 		pass
 
 	@staticmethod
+	def load_sframes_from_dir(dir):
+		 return [child[0] for child in os.walk(dir) if child[0].split('.')[-1] == 'sframe']
+
+	@staticmethod
 	def read_sframe(sframe_path):
 		return tc.load_sframe(sframe_path).add_row_number()
 
@@ -47,5 +51,4 @@ class Parser(object):
 			sf.save(name)
 
 		return sf
-
 
